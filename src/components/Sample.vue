@@ -2,18 +2,18 @@
   <div>
     <div class="form-item">
       <b>First Name:</b>
-      <input type="text" v-model="firstName" />
+      <v-text-field variant="solo-filled" type="text" v-model="firstName" />
     </div>
     <div class="form-item">
       <b>Last Name:</b>
-      <input type="text" v-model="lastName" />
+      <v-text-field variant="solo-filled" type="text" v-model="lastName" />
     </div>
 
     <div>
       FullName: <span>{{ displayName }}</span>
     </div>
 
-    <button @click="register">Register</button>
+    <v-btn variant="outlined" @click="register">Register</v-btn>
   </div>
 </template>
 
@@ -49,7 +49,6 @@ export default {
   },
 
   mounted() {},
-  
 };
 </script>
 
