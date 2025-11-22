@@ -11,6 +11,8 @@ import * as directives from "vuetify/directives";
 
 import App from "./App.vue";
 import router from "./router";
+import 'vue3-toastify/dist/index.css';
+import '@mdi/font/css/materialdesignicons.css'
 
 // Define your custom theme
 const customTheme = {
@@ -39,8 +41,11 @@ const vuetify = createVuetify({
   },
   defaults: {
     global: {
-      color: "primary", // sets primary as the default for all components that support color
+      // color: "primary", // sets primary as the default for all components that support color
     },
+  },
+  icons: {
+    defaultSet: 'mdi',
   },
 });
 

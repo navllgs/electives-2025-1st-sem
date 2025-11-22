@@ -1,143 +1,92 @@
 <template>
-  <div id="main-app">
-    <div id="header">
-      <span class="logo" @click="goHome()">Header</span>
-    </div>
-    <div id="main-page">
-      <div id="left-navigation">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/about-me">About Me</RouterLink>
-      </div>
-      <div id="main-content">
-        <div id="content">
-          <router-view></router-view>
-        </div>
-        <div id="footer">Footer</div>
-      </div>
-    </div>
-  </div>
+  <!-- HEADER -->
+  <v-app-bar color="primary" dark elevate-on-scroll>
+    <v-app-bar-title @click="goHome" style="cursor: pointer">
+      <div class="hover-scale">Inventory System</div>
+    </v-app-bar-title>
+  </v-app-bar>
+
+  <v-main>
+    <v-container fluid class="pa-0" style="height: calc(100vh - 64px)">
+      <v-row no-gutters style="height: 100%">
+        <!-- LEFT NAVIGATION -->
+        <v-navigation-drawer permanent width="220" color="grey-lighten-4" elevation="2" class="py-3">
+          <v-list nav density="comfortable">
+            <v-list-item to="/" title="Home" prepend-icon="mdi-home" />
+            <v-list-item to="/supabase" title="Supabase" prepend-icon="mdi-database" />
+            <v-list-item to="/supabase2" title="Supabase2" prepend-icon="mdi-database-outline" />
+            <v-list-item to="/book-inventory" title="Inventory" prepend-icon="mdi-database-outline" />
+            <v-list-item to="/book-transaction" title="Transaction" prepend-icon="mdi-database-outline" />
+            <v-list-item to="/about" title="About" prepend-icon="mdi-account" />
+
+            <!-- SHOW DIALOG INSTEAD OF DIRECT LOGOUT -->
+            <v-list-item title="Logout" prepend-icon="mdi-logout" @click="logoutDialog = true" />
+          </v-list>
+        </v-navigation-drawer>
+
+        <!-- MAIN CONTENT -->
+        <v-col class="d-flex flex-column" style="height: 100%; background: #fafafa">
+          <div style="flex: 1; overflow-y: auto; padding: 20px">
+            <router-view />
+          </div>
+
+          <!-- FOOTER -->
+          <v-footer height="48" style="max-height: 48px" class="px-4 w-100" color="grey-lighten-3">
+            <div class="text-grey-darken-1 text-center w-100">
+              version 1.0.0
+            </div>
+          </v-footer>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
+
+  <!-- LOGOUT CONFIRMATION DIALOG -->
+  <v-dialog v-model="logoutDialog" width="400">
+    <v-card>
+      <v-card-title class="text-h6">Confirm Logout</v-card-title>
+
+      <v-card-text> Are you sure you want to log out? </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn variant="text" @click="logoutDialog = false">Cancel</v-btn>
+
+        <v-btn variant="elevated" color="error" @click="confirmLogout">
+          Logout
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-export default {};
+import VueCookie from "vue-cookie";
+
+export default {
+  data() {
+    return {
+      logoutDialog: false,
+    };
+  },
+
+  methods: {
+    goHome() {
+      this.$router.push("/");
+    },
+
+    confirmLogout() {
+      VueCookie.delete("ELECTIVE_TOKEN");
+      this.logoutDialog = false;
+      this.$router.push("/login");
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-#main-app {
-  height: 100vh;
-  width: 100%;
-  background: red;
-}
-
-#header {
-  height: 60px;
-  background: green;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-}
-
-#main-page {
-  background: pink;
-  height: calc(100vh - 60px);
-  display: flex;
-}
-
-#left-navigation {
-  background: purple;
-  width: 200px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-}
-
-#main-content {
-  background: teal;
-  width: 100%;
-}
-
-#content {
-  background-color: blueviolet;
-  height: calc(100% - 40px);
-  padding: 12px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-#footer {
-  padding: 12px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.logo:hover {
-  scale: 1.1;
-  cursor: pointer;
-}
-</style>
-
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.hover-scale:hover {
+  font-size: 105%;
 }
 </style>

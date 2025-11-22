@@ -13,11 +13,11 @@
 
   </div> -->
   <v-app>
-    <v-main>
-      <component :is="layout">
-        <router-view />
-      </component>
-    </v-main>
+    <!-- <v-main> -->
+    <component :is="layout">
+      <router-view />
+    </component>
+    <!-- </v-main> -->
   </v-app>
   <!-- <div class="main-app">
     <div class="top-navigation">
@@ -36,6 +36,8 @@
 import { RouterLink, RouterView } from "vue-router";
 import DefaultLayout from "./layouts/DefaultLayout.vue";
 import NoLayout from "./layouts/NoLayout.vue";
+import { supabase } from "./library/supabase";
+import VueCookie from "vue-cookie";
 
 export default {
   // components: { BlogPost },
@@ -54,6 +56,23 @@ export default {
     };
   },
 
+  async mounted() {
+    const token = VueCookie.get("ELECTIVE_TOKEN");
+    if (!token) {
+      this.$router.push("/login");
+      window.currentUser = {};
+      return;
+    }
+    const { data } = await supabase.auth.getUser(token);
+    if (data.user) {
+      window.currentUser = data.user;
+      // this.$router.push('/')
+    } else {
+      window.currentUser = {};
+      this.$router.push("/login");
+    }
+  },
+
   computed: {
     layout() {
       const layoutName = this.$route.meta.layout || "DefaultLayout";
@@ -63,5 +82,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
