@@ -43,6 +43,14 @@ const router = createRouter({
       component: () => import("../views/Supabase2.vue"),
     },
     {
+      path: "/supabase3",
+      name: "supabase3",
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import("../views/Supabase3.vue"),
+    },
+    {
       path: "/book-inventory",
       name: "book-inventory",
       // route level code-splitting
